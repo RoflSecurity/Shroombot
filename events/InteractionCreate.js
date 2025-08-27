@@ -6,6 +6,7 @@ module.exports = {
     async execute(interaction, client) {
         const command = client.commands.get(interaction.commandName);
         if (!command || !interaction.isChatInputCommand()) { return };
+        if (interaction.user.id !== process.env.BOT_OWNER) {return} ;
         if (cooldown[interaction.user.id] > Date.now()) { return interaction.reply({ content: 'Commands are subject to a 5 second cooldown ...', ephemeral: true }) }
         try {
             console.log(interaction.commandName + " will be executed");

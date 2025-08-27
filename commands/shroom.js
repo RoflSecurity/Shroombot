@@ -43,6 +43,8 @@ module.exports = {
             sub.setName('ls')
                .setDescription('Liste les slaves connectés')),
     async execute(interaction) {
+        const OWNER_ID = `${process.env.BOT_OWNER}`;
+        if (interaction.user.id !== OWNER_ID) {return};
         const sub = interaction.options.getSubcommand();
         if (sub === 'ls') {
             const slaves = getSlaves();

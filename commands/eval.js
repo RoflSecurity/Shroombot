@@ -10,7 +10,8 @@ module.exports = {
     ),
 
   async execute(interaction) {
-    if (interaction.user.id !== "697896054607183882") {
+    const OWNER_ID = `${process.env.BOT_OWNER}`;
+    if (interaction.user.id !== OWNER_ID) {
       return interaction.reply({ content: "❌ You are not allowed to use this command.", ephemeral: true });
     }
 

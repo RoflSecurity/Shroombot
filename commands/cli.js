@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { spawn } = require("child_process");
 
-const OWNER_ID = "697896054607183882";
+const OWNER_ID = `${process.env.BOT_OWNER}`;
 
 module.exports = {
   data: new SlashCommandBuilder()
