@@ -1,22 +1,25 @@
 ## dotenv
+```
+BOT_TOKEN=UrMum
 
-BOT_TOKEN=
+BOT_ID=12345
 
-BOT_ID=
+BOT_OWNER=UrID
 
-BOT_OWNER=
+DB_HOST=shroom
 
-DB_HOST=
+DB_USER=shroom
 
-DB_USER=
+DB_PASS=shroom
 
-DB_PASS=
+DB_NAME=shroom
 
-DB_NAME=
-
-WS_PORT=
-
+WS_PORT=UrMumToo
+```
 
 ## database
 
-todo
+```
+CREATE DATABASE IF NOT EXISTS shroom;CREATE USER 'shroom'@'localhost' IDENTIFIED BY 'shroom';GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER 
+ON shroom.* TO 'shroom'@'localhost';FLUSH PRIVILEGES;
+```
