@@ -8,7 +8,7 @@ module.exports = {
         .addSubcommand(sub =>
             sub.setName('sendtoall')
                .setDescription('Envoyer une action à tous les slaves')
-               .addStringOption(opt => 
+               .addStringOption(opt =>
                    opt.setName('action')
                       .setDescription('Action à exécuter')
                       .setRequired(true)
@@ -16,18 +16,18 @@ module.exports = {
                           { name: 'Toggle', value: 'toggle' },
                           { name: 'Set Target', value: 'setTarget' }
                       ))
-               .addStringOption(opt => 
-                   opt.setName('server')
-                      .setDescription('Nouvelle IP si action=setTarget')
+               .addStringOption(opt =>
+                   opt.setName('value')
+                      .setDescription('Valeur pour l’action (ex: true/false pour toggle ou nouvelle IP pour setTarget)')
                       .setRequired(false)))
         .addSubcommand(sub =>
             sub.setName('sendtoone')
                .setDescription('Envoyer une action à un seul slave')
-               .addStringOption(opt => 
+               .addStringOption(opt =>
                    opt.setName('uuid')
                       .setDescription('UUID du slave')
                       .setRequired(true))
-               .addStringOption(opt => 
+               .addStringOption(opt =>
                    opt.setName('action')
                       .setDescription('Action à exécuter')
                       .setRequired(true)
@@ -35,17 +35,19 @@ module.exports = {
                           { name: 'Toggle', value: 'toggle' },
                           { name: 'Set Target', value: 'setTarget' }
                       ))
-               .addStringOption(opt => 
-                   opt.setName('server')
-                      .setDescription('Nouvelle IP si action=setTarget')
+               .addStringOption(opt =>
+                   opt.setName('value')
+                      .setDescription('Valeur pour l’action (ex: true/false pour toggle ou nouvelle IP pour setTarget)')
                       .setRequired(false)))
         .addSubcommand(sub =>
             sub.setName('ls')
                .setDescription('Liste les slaves connectés')),
     async execute(interaction) {
         const OWNER_ID = `${process.env.BOT_OWNER}`;
-        if (interaction.user.id !== OWNER_ID) {return};
+        if (interaction.user.id !== OWNER_ID) return;
+
         const sub = interaction.options.getSubcommand();
+
         if (sub === 'ls') {
             const slaves = getSlaves();
             await interaction.reply(`Slaves connectés: ${slaves.join(', ') || 'aucun'}`);
@@ -53,14 +55,16 @@ module.exports = {
         }
 
         const action = interaction.options.getString('action');
-        const server = interaction.options.getString('server');
+        const value = interaction.options.getString('value');
 
-        if (action === 'setTarget' && !server) {
+        if (action === 'setTarget' && !value) {
             await interaction.reply({ content: 'Erreur : Vous devez fournir une IP pour setTarget', ephemeral: true });
             return;
         }
 
-        const payload = action === 'setTarget' ? { action, server } : { action };
+        const payload = action === 'toggle'
+            ? { action, value: value === 'true' ? true : value === 'false' ? false : undefined }
+            : { action, server: value };
 
         if (sub === 'sendtoone') {
             const uuid = interaction.options.getString('uuid');
